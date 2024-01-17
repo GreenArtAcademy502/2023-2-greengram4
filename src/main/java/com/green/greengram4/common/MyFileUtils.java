@@ -59,21 +59,23 @@ public class MyFileUtils {
         }
     }
 
-    public void delFilesTrigger(String relativePath) {
-        delFiles(uploadPrefixPath + relativePath);
+    public void delFolderTrigger(String relativePath) {
+        delFolder(uploadPrefixPath + relativePath);
     }
 
-    public void delFiles(String folderPath) { //폴더 아래에 폴더 및 파일 삭제, 보냈는 폴더는 삭제 안 함
+    public void delFolder(String folderPath) { //폴더 삭제
         File folder = new File(folderPath);
         if(folder.exists()) {
             File[] files = folder.listFiles();
 
             for(File file : files) {
                 if(file.isDirectory()) {
-                    delFiles(file.getAbsolutePath());
+                    delFolder(file.getAbsolutePath());
+                } else {
+                    file.delete();
                 }
-                file.delete();
             }
+            folder.delete();
         }
     }
 
