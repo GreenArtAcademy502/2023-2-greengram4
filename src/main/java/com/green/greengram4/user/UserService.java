@@ -1,6 +1,8 @@
 package com.green.greengram4.user;
 
 import com.green.greengram4.common.*;
+import com.green.greengram4.exception.AuthErrorCode;
+import com.green.greengram4.exception.RestApiException;
 import com.green.greengram4.security.AuthenticationFacade;
 import com.green.greengram4.security.JwtTokenProvider;
 import com.green.greengram4.security.MyPrincipal;
@@ -49,8 +51,9 @@ public class UserService {
         sDto.setUid(dto.getUid());
 
         UserEntity entity = mapper.selUser(sDto);
-        if(entity == null) {
-            return UserSigninVo.builder().result(Const.LOGIN_NO_UID).build();
+        if(entity == null) { //아이디 없음
+            //return UserSigninVo.builder().result(Const.LOGIN_NO_UID).build();
+            throw new RestApiException(AuthErrorCode.NOT_EXIST_USER_ID);
         } else if(!passwordEncoder.matches(dto.getUpw(), entity.getUpw())) {
             return UserSigninVo.builder().result(Const.LOGIN_DIFF_UPW).build();
         }
