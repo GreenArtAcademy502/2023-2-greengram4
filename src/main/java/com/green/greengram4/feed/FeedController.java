@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -24,9 +26,7 @@ public class FeedController {
 
     @Operation(summary = "피드 등록", description = "피드 등록 처리")
     @PostMapping
-    public FeedPicsInsDto postFeed(@RequestPart List<MultipartFile> pics, @RequestPart FeedInsDto dto) {
-        log.info("pics: {}", pics.size());
-        log.info("dto: {}", dto);
+    public FeedPicsInsDto postFeed(@RequestPart(required = false) List<MultipartFile> pics, @RequestPart FeedInsDto dto) {
         dto.setPics(pics);
         return service.postFeed(dto);
     }
@@ -34,9 +34,14 @@ public class FeedController {
     @GetMapping
     @Operation(summary = "피드 리스트", description = "전체 피드 리스트, 특정 사용자 프로필 화면에서 사용할 피드 리스트, 한 페이지 30개 피드 가져옴" +
             "<br><br>page: 페이지<br>loginedIuser: 로그인한 유저 pk")
-    public List<FeedSelVo> getFeedAll(FeedSelDto dto) {
+    public List<FeedSelVo> getFeedAll(HttpServletRequest req, FeedSelDto dto) {
         log.info("dto: {}", dto);
         //return service.getFeedAll(dto);
+        HttpSession session = req.getSession(false);
+        if(session != null) {
+           int iuser = (int)session.getAttribute("loginUserPk");
+           log.info("iuser {}", iuser);
+        }
 
         List<FeedSelVo> list = service.getFeedAll(dto);
         log.info("list: {}", list);

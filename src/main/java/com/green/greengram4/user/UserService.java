@@ -11,6 +11,7 @@ import com.green.greengram4.user.model.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,10 +53,10 @@ public class UserService {
 
         UserEntity entity = mapper.selUser(sDto);
         if(entity == null) { //아이디 없음
-            //return UserSigninVo.builder().result(Const.LOGIN_NO_UID).build();
             throw new RestApiException(AuthErrorCode.NOT_EXIST_USER_ID);
-        } else if(!passwordEncoder.matches(dto.getUpw(), entity.getUpw())) {
-            return UserSigninVo.builder().result(Const.LOGIN_DIFF_UPW).build();
+        } else if(!passwordEncoder.matches(dto.getUpw(), entity.getUpw())) { // 비밀번호를 확인해 주세요.
+            //return UserSigninVo.builder().result(Const.LOGIN_DIFF_UPW).build();
+            throw new RestApiException(AuthErrorCode.VALID_PASSWORD);
         }
 
         MyPrincipal myPrincipal = MyPrincipal.builder()
@@ -69,6 +70,9 @@ public class UserService {
         int rtCookieMaxAge = appProperties.getJwt().getRefreshTokenCookieMaxAge();
         cookieUtils.deleteCookie(res, "rt");
         cookieUtils.setCookie(res, "rt", rt, rtCookieMaxAge);
+
+        HttpSession session = req.getSession(true);
+        session.setAttribute("loginUserPk", entity.getIuser());
 
         return UserSigninVo.builder()
                 .result(Const.SUCCESS)

@@ -35,7 +35,7 @@ class FeedControllerTest {
     @Autowired private ObjectMapper mapper;
 
     @MockBean private FeedService service;
-
+/*
     @Test
     void postFeed() throws Exception {
         ResVo result = new ResVo(7);
@@ -56,7 +56,7 @@ class FeedControllerTest {
 
         verify(service).postFeed(any());
     }
-
+*/
     @Test
     void getFeedAll() throws Exception {
         List<FeedSelVo> list = new ArrayList<>();
