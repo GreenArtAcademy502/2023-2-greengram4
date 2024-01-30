@@ -1,5 +1,6 @@
 package com.green.greengram4.common;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -10,17 +11,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Slf4j
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     private final String imgFolder;
+    private final ObjectMapper om;
 
-    public WebMvcConfiguration(@Value("${file.dir}") String imgFolder) {
+    public WebMvcConfiguration(@Value("${file.dir}") String imgFolder, ObjectMapper om) {
         this.imgFolder = imgFolder;
+        this.om = om;
     }
 
     @Override

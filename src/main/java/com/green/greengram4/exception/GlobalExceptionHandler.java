@@ -34,6 +34,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
         return handleExceptionInternal(ex, CommonErrorCode.INVALID_PARAMETER);
     }
 
@@ -68,16 +69,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // 코드 가독성을 위해 에러 처리 메세지를 만드는 메소드 분리
     private ErrorResponse makeErrorResponse(BindException e, ErrorCode errorCode) {
+
         List<ErrorResponse.ValidationError> validationErrorList = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(ErrorResponse.ValidationError::of)
-                .collect(Collectors.toList());
+                                .getFieldErrors()
+                                .stream()
+
+                                //.map(ErrorResponse.ValidationError::of)
+                                //.map(item -> ErrorResponse.ValidationError.of(item))
+                                .map(item -> { return ErrorResponse.ValidationError.of(item); })
+                                .collect(Collectors.toList());
 
         return ErrorResponse.builder()
                 .code(errorCode.name())
                 .message(errorCode.getMessage())
-                .valid(validationErrorList)
+                .valids(validationErrorList)
                 .build();
     }
 }

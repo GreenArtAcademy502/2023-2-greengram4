@@ -29,6 +29,8 @@ public class SecurityConfiguration {
                                                                     , "/err"
                                                                     , "/"
                                                                     , "/pic/**"
+                                                                    , "/signin"
+                                                                    , "/signup"
                                                                     , "/feed"
                                                                     , "/feed/**"
                                                                     , "/profile"
@@ -42,7 +44,8 @@ public class SecurityConfiguration {
                                                                     , "/swagger-ui/**"
                                                                     , "/v3/api-docs/**"
                                         ).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(except -> {

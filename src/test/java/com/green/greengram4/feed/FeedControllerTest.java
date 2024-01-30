@@ -59,6 +59,7 @@ class FeedControllerTest {
 */
     @Test
     void getFeedAll() throws Exception {
+        //given - when - then
         List<FeedSelVo> list = new ArrayList<>();
         FeedSelVo item1 = new FeedSelVo();
         item1.setIfeed(1);

@@ -1,6 +1,5 @@
 package com.green.greengram4.common;
 
-import com.green.greengram4.common.MyFileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +28,7 @@ public class MyFileUtilsTest {
 
     @Test
     public void makeFolderTest() {
-        String path = "/yyy2";
+        String path = "/yyy22";
         File preFolder = new File(myFileUtils.getUploadPrefixPath(), path);
         assertEquals(false, preFolder.exists());
 
