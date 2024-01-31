@@ -43,6 +43,7 @@ public class SecurityConfiguration {
                                                                     , "/swagger.html"
                                                                     , "/swagger-ui/**"
                                                                     , "/v3/api-docs/**"
+                                                                    , "/api/open/apartment"
                                         ).permitAll()
                         .anyRequest()
                         .authenticated()

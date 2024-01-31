@@ -36,7 +36,6 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         HttpServletResponse servletResponse =
                 ((ServletServerHttpResponse) response).getServletResponse();
-
         int status = servletResponse.getStatus();
         HttpStatus resolve = HttpStatus.resolve(status);
         String path = request.getURI().getPath();
