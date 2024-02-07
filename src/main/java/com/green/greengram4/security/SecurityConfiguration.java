@@ -3,6 +3,7 @@ package com.green.greengram4.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,31 +23,19 @@ public class SecurityConfiguration {
                 .httpBasic(http -> http.disable())
                 .formLogin(form -> form.disable())
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/user/signin"
-                                                                    , "/api/user/signup"
-                                                                    , "/api/user/refresh-token"
-                                                                    , "/error"
-                                                                    , "/err"
-                                                                    , "/"
-                                                                    , "/pic/**"
-                                                                    , "/signin"
-                                                                    , "/signup"
-                                                                    , "/feed"
-                                                                    , "/feed/**"
-                                                                    , "/profile"
-                                                                    , "/profile/**"
-                                                                    , "/fimg/**"
-                                                                    , "/css/**"
-                                                                    , "/static/**"
-                                                                    , "/index.html"
-                                                                    , "/static/**"
-                                                                    , "/swagger.html"
-                                                                    , "/swagger-ui/**"
-                                                                    , "/v3/api-docs/**"
-                                                                    , "/api/open/apartment"
-                                        ).permitAll()
-                        .anyRequest()
-                        .authenticated()
+                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                                          "/api/feed"
+                                        , "/api/feed/comment"
+                                        , "/api/dm"
+                                        , "/api/dm/msg"
+                                        ).authenticated()
+                                        .requestMatchers(HttpMethod.POST, "/api/user/signout"
+                                                                        , "/api/user/follow"
+                                        ).authenticated()
+                                        .requestMatchers(HttpMethod.GET, "/api/user").authenticated()
+                                        .requestMatchers(HttpMethod.PATCH, "/api/user/pic").authenticated()
+                                        .requestMatchers(HttpMethod.GET, "/api/feed/fav").hasAnyRole("ADMIN")
+                                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(except -> {

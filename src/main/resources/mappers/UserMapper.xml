@@ -11,6 +11,7 @@
 
     <select id="selUser">
         SELECT iuser, uid, upw, nm, pic, firebase_token AS firebaseToken
+             , role
              , created_at AS createdAt, updated_at AS updatedAt
         FROM t_user
         WHERE
